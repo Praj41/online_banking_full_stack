@@ -1,0 +1,13 @@
+#spring.datasource.url=jdbc:mysql://localhost:36000/bankingdb
+
+#spring.datasource.username=root
+#spring.datasource.password=password
+
+#spring.datasource.hikari.maximum-pool-size=30
+
+app:
+    datasource:
+      jdbc-url: jdbc:mysql://localhost:36000/bankingdb
+      username: root
+      password: password
+      pool-size: 30
