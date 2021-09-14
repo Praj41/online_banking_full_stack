@@ -8,22 +8,32 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("mysql")
-public class userDataAccessService implements userDao {
+@Repository
+public class UserDao {
 
     private final JdbcTemplate jdbcTemplate;
 
     @Autowired
-    public userDataAccessService(JdbcTemplate jdbcTemplate) {
+    public UserDao(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    @Override
-    public int insertUser(Long user_id, User user) {
-        return 0;
+    public int insertUser(User user) {
+        String sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.update(sql,
+                user.getUser_id(),
+                user.getEmail(),
+                user.isEnabled(),
+                user.getFirst_name(),
+                user.getLast_name(),
+                user.getPassword(),
+                user.getPhone(),
+                user.getUsername(),
+                user.getPrimary_account_id(),
+                user.getSavings_account_id());
+        return 1;
     }
 
-    @Override
     public List<User> selectAllUser() {
         String sql = "SELECT * FROM user";
         List<User> users = jdbcTemplate.query(sql, (resultSet, i) -> {
@@ -42,7 +52,6 @@ public class userDataAccessService implements userDao {
         return users;
     }
 
-    @Override
     public Optional<User> selectUserById(Long user_id) {
         String sql = "SELECT * FROM user WHERE user_id = ?";
         User user = jdbcTemplate.queryForObject(sql,
@@ -62,12 +71,10 @@ public class userDataAccessService implements userDao {
         return Optional.ofNullable(user);
     }
 
-    @Override
     public int disableUserById(Long user_id) {
         return 0;
     }
 
-    @Override
     public int updateUserById(Long user_id, User user) {
         return 0;
     }

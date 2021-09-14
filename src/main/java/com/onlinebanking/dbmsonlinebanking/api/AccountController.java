@@ -1,20 +1,32 @@
 package com.onlinebanking.dbmsonlinebanking.api;
 
 import com.onlinebanking.dbmsonlinebanking.domain.User;
-import com.onlinebanking.dbmsonlinebanking.service.userService;
+import com.onlinebanking.dbmsonlinebanking.service.accountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RequestMapping("api/v1/user")
 @RestController
-public class userController {
+public class AccountController {
 
+    private final accountService accountService;
+
+    @Autowired
+    public AccountController(accountService accountService) {
+        this.accountService = accountService;
+    }
+
+    @PostMapping
+    public void createAcc(@RequestBody User user) {
+        accountService.createAccount(user);
+    }
+
+}
+/*
     private final userService userService;
 
     @Autowired
-    public userController(userService userService) {
+    public AccountController(userService userService) {
         this.userService = userService;
     }
 
@@ -44,4 +56,4 @@ public class userController {
         userService.updateUserById(user_id, userToUpdate);
     }
 
-}
+}*/

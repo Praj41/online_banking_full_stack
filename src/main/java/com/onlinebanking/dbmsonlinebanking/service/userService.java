@@ -1,9 +1,8 @@
 package com.onlinebanking.dbmsonlinebanking.service;
 
-import com.onlinebanking.dbmsonlinebanking.dao.userDao;
+import com.onlinebanking.dbmsonlinebanking.dao.UserDao;
 import com.onlinebanking.dbmsonlinebanking.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,10 +11,10 @@ import java.util.Optional;
 @Service
 public class userService {
 
-    private final userDao userDao;
+    private final UserDao userDao;
 
     @Autowired
-    public userService(@Qualifier("mysql") userDao userDao) {
+    public userService(UserDao userDao) {
         this.userDao = userDao;
     }
 
