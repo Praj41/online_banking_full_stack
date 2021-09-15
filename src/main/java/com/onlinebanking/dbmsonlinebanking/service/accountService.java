@@ -24,8 +24,8 @@ public class accountService {
     public int createAccount(User user) {
         user.setPrimary_account_id(acc_no);
         user.setPrimary_account_id(acc_no);
-        userService.addUser(user);
         primaryAccountDao.createAcc(default_balance, acc_no++);
+        userService.addUser(user);
         return 1;
     }
 
