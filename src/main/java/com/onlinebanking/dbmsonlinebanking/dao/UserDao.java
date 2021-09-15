@@ -78,4 +78,23 @@ public class UserDao {
     public int updateUserById(Long user_id, User user) {
         return 0;
     }
+
+    public Optional<User> selectUserByUsername(String username) {
+        String sql = "SELECT * FROM user WHERE username = ?";
+        User user = jdbcTemplate.queryForObject(sql,
+                (resultSet, i) -> {
+                    return new User(
+                            resultSet.getLong("user_id"),
+                            resultSet.getString("email"),
+                            resultSet.getBoolean("enabled"),
+                            resultSet.getString("first_name"),
+                            resultSet.getString("last_name"),
+                            resultSet.getString("password"),
+                            resultSet.getString("phone"),
+                            resultSet.getString("username"),
+                            resultSet.getLong("primary_account_id"),
+                            resultSet.getLong("savings_account_id"));
+                }, username);
+        return Optional.ofNullable(user);
+    }
 }

@@ -37,4 +37,12 @@ public class userService {
     public int updateUserById(Long user_id, User user) {
         return userDao.updateUserById(user_id, user);
     }
+
+    public Long getUserByUsernamePass(String username, String password) {
+        User user = userDao.selectUserByUsername(username).get();
+        if (user.getPassword().equals(password))
+            return user.getUser_id();
+        else
+            return 0L;
+    }
 }

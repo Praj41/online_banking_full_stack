@@ -29,4 +29,16 @@ public class accountService {
         return 1;
     }
 
+    public String authLogin(User user) {
+        Long uid = userService.getUserByUsernamePass(user.getUsername(), user.getPassword());
+        if (uid == 0){
+            return "0";
+        } else {
+            return "1";
+        }
+    }
+
+    public User selectUser() {
+        return userService.getUserById(5L).get();
+    }
 }
