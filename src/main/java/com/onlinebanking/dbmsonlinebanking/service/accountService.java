@@ -12,7 +12,6 @@ public class accountService {
 
     private final userService userService;
 
-    private static long acc_no = 1121000000;
     private static final double default_balance = 5000.00;
 
     @Autowired
@@ -22,9 +21,8 @@ public class accountService {
     }
 
     public int createAccount(User user) {
-        user.setPrimary_account_id(acc_no);
-        user.setPrimary_account_id(acc_no);
-        primaryAccountDao.createAcc(default_balance, acc_no++);
+        user.setEnabled(true);
+        primaryAccountDao.createAcc(default_balance);
         userService.addUser(user);
         return 1;
     }
@@ -39,6 +37,7 @@ public class accountService {
     }
 
     public User selectUser() {
+
         return userService.getUserById(5L).get();
     }
 }

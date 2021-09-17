@@ -1,19 +1,18 @@
-var loginRequest = new XMLHttpRequest();
-
-
-
-loginRequest.onload = function () {
-    console.log(loginRequest.responseText);
-    if (loginRequest.responseText[0] === '1') {
-        alert("login success");
-        window.location.replace("userFront.html");
-    } else {
-        alert("login failed");
-
-    }
-};
 
 function login() {
+    var loginRequest = new XMLHttpRequest();
+
+    loginRequest.onload = function () {
+        console.log(loginRequest.responseText);
+        if (loginRequest.responseText[0] === '1') {
+            alert("login success");
+            window.location.replace("userFront.html");
+        } else {
+            alert("login failed");
+
+        }
+    };
+
     var cred = {
         "username" : "",
         "pass" : ""

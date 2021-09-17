@@ -39,10 +39,15 @@ public class userService {
     }
 
     public Long getUserByUsernamePass(String username, String password) {
-        User user = userDao.selectUserByUsername(username).get();
-        if (user.getPassword().equals(password))
-            return user.getUser_id();
-        else
+        Optional<User> user = userDao.selectUserByUsername(username);
+
+        if (user.isPresent()) {
+            if (user.get().getPassword().equals(password))
+                return user.get().getUser_id();
+            else
+                return 0L;
+        } else {
             return 0L;
+        }
     }
 }

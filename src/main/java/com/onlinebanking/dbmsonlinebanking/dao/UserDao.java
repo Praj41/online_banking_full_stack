@@ -2,6 +2,7 @@ package com.onlinebanking.dbmsonlinebanking.dao;
 
 import com.onlinebanking.dbmsonlinebanking.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -19,18 +20,15 @@ public class UserDao {
     }
 
     public int insertUser(User user) {
-        String sql = "INSERT INTO user VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "CALL insertUser(?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
-                user.getUser_id(),
                 user.getEmail(),
                 user.isEnabled(),
                 user.getFirst_name(),
                 user.getLast_name(),
                 user.getPassword(),
                 user.getPhone(),
-                user.getUsername(),
-                user.getPrimary_account_id(),
-                user.getSavings_account_id());
+                user.getUsername());
         return 1;
     }
 
@@ -54,20 +52,25 @@ public class UserDao {
 
     public Optional<User> selectUserById(Long user_id) {
         String sql = "SELECT * FROM user WHERE user_id = ?";
-        User user = jdbcTemplate.queryForObject(sql,
-                (resultSet, i) -> {
-                    return new User(
-                            resultSet.getLong("user_id"),
-                            resultSet.getString("email"),
-                            resultSet.getBoolean("enabled"),
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("password"),
-                            resultSet.getString("phone"),
-                            resultSet.getString("username"),
-                            resultSet.getLong("primary_account_id"),
-                            resultSet.getLong("savings_account_id"));
-                }, user_id);
+        User user;
+        try {
+            user = jdbcTemplate.queryForObject(sql,
+                    (resultSet, i) -> {
+                        return new User(
+                                resultSet.getLong("user_id"),
+                                resultSet.getString("email"),
+                                resultSet.getBoolean("enabled"),
+                                resultSet.getString("first_name"),
+                                resultSet.getString("last_name"),
+                                resultSet.getString("password"),
+                                resultSet.getString("phone"),
+                                resultSet.getString("username"),
+                                resultSet.getLong("primary_account_id"),
+                                resultSet.getLong("savings_account_id"));
+                    }, user_id);
+        } catch (EmptyResultDataAccessException exp) {
+            return Optional.empty();
+        }
         return Optional.ofNullable(user);
     }
 
@@ -81,20 +84,26 @@ public class UserDao {
 
     public Optional<User> selectUserByUsername(String username) {
         String sql = "SELECT * FROM user WHERE username = ?";
-        User user = jdbcTemplate.queryForObject(sql,
-                (resultSet, i) -> {
-                    return new User(
-                            resultSet.getLong("user_id"),
-                            resultSet.getString("email"),
-                            resultSet.getBoolean("enabled"),
-                            resultSet.getString("first_name"),
-                            resultSet.getString("last_name"),
-                            resultSet.getString("password"),
-                            resultSet.getString("phone"),
-                            resultSet.getString("username"),
-                            resultSet.getLong("primary_account_id"),
-                            resultSet.getLong("savings_account_id"));
-                }, username);
+        User user;
+        try {
+            user = jdbcTemplate.queryForObject(sql,
+                    (resultSet, i) -> {
+                        return new User(
+                                resultSet.getLong("user_id"),
+                                resultSet.getString("email"),
+                                resultSet.getBoolean("enabled"),
+                                resultSet.getString("first_name"),
+                                resultSet.getString("last_name"),
+                                resultSet.getString("password"),
+                                resultSet.getString("phone"),
+                                resultSet.getString("username"),
+                                resultSet.getLong("primary_account_id"),
+                                resultSet.getLong("savings_account_id"));
+                    }, username);
+        } catch (EmptyResultDataAccessException exc) {
+            System.out.println("EmptyResultDataAccessException Handled");
+            return Optional.empty();
+        }
         return Optional.ofNullable(user);
     }
 }

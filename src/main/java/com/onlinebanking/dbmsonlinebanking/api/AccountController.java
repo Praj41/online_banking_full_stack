@@ -17,11 +17,6 @@ public class AccountController {
         this.accountService = accountService;
     }
 
-    @PostMapping
-    public void createAcc(@RequestBody User user) {
-        accountService.createAccount(user);
-    }
-
     @PostMapping(path = "login")
     public String userLogin(@RequestBody User user) {
         return accountService.authLogin(user);
@@ -30,6 +25,11 @@ public class AccountController {
     @GetMapping
     public User userSelect() {
         return accountService.selectUser();
+    }
+
+    @PostMapping(path = "signup")
+    public int userSignup(@RequestBody User user) {
+        return accountService.createAccount(user);
     }
 
 }

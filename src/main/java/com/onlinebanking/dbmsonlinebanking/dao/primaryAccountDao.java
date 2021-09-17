@@ -14,9 +14,9 @@ public class primaryAccountDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public int createAcc(double default_balance, long acc_no) {
-        String sql = "INSERT INTO primary_account VALUES (?, ?)";
-        jdbcTemplate.update(sql, default_balance,acc_no);
+    public int createAcc(double default_balance) {
+        String sql = "CALL insertpri(?)";
+        jdbcTemplate.update(sql, Double.toString(default_balance));
         return 1;
     }
 }
