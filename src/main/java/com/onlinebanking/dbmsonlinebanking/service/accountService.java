@@ -2,6 +2,7 @@ package com.onlinebanking.dbmsonlinebanking.service;
 
 import com.onlinebanking.dbmsonlinebanking.dao.primaryAccountDao;
 import com.onlinebanking.dbmsonlinebanking.domain.User;
+import com.onlinebanking.dbmsonlinebanking.domain.primaryAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,12 +33,19 @@ public class accountService {
         if (uid == 0){
             return "0";
         } else {
-            return "1";
+            return uid.toString();
         }
     }
 
     public User selectUser() {
-
         return userService.getUserById(5L).get();
+    }
+
+    public primaryAccount getPInfoById(Long accountId) {
+        primaryAccount pri = primaryAccountDao.getAccountDetailsById(accountId);
+        if (pri == null)
+            return new primaryAccount(0L, 0, 0L);
+        else
+            return pri;
     }
 }

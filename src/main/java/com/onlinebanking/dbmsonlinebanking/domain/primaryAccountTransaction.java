@@ -14,7 +14,7 @@ public class primaryAccountTransaction {
     double amount;
 
     @JsonProperty("available_balance")
-    BigDecimal availableBalance;
+    double availableBalance;
 
     @JsonProperty("date")
     Timestamp date;
@@ -33,7 +33,7 @@ public class primaryAccountTransaction {
 
     public primaryAccountTransaction(Long id,
                                      double amount,
-                                     BigDecimal availableBalance,
+                                     double availableBalance,
                                      Timestamp date,
                                      String description,
                                      String status,
@@ -65,11 +65,11 @@ public class primaryAccountTransaction {
         this.amount = amount;
     }
 
-    public BigDecimal getAvailableBalance() {
+    public double getAvailableBalance() {
         return availableBalance;
     }
 
-    public void setAvailableBalance(BigDecimal availableBalance) {
+    public void setAvailableBalance(double availableBalance) {
         this.availableBalance = availableBalance;
     }
 

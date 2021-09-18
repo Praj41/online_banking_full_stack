@@ -1,6 +1,7 @@
 package com.onlinebanking.dbmsonlinebanking.api;
 
 import com.onlinebanking.dbmsonlinebanking.domain.User;
+import com.onlinebanking.dbmsonlinebanking.domain.primaryAccount;
 import com.onlinebanking.dbmsonlinebanking.service.accountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,11 @@ public class AccountController {
     @GetMapping
     public User userSelect() {
         return accountService.selectUser();
+    }
+
+    @GetMapping(path = "PAccount/{id}")
+    public primaryAccount getPAccountDetails(@PathVariable("id") Long accountId) {
+        return accountService.getPInfoById(accountId);
     }
 
     @PostMapping(path = "signup")

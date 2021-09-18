@@ -4,12 +4,11 @@ function login() {
 
     loginRequest.onload = function () {
         console.log(loginRequest.responseText);
-        if (loginRequest.responseText[0] === '1') {
+        if (loginRequest.responseText[0] === '0') {
+            alert("login failed");
+        } else {
             alert("login success");
             window.location.replace("userFront.html");
-        } else {
-            alert("login failed");
-
         }
     };
 
