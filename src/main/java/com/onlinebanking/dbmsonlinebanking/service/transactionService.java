@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class transactionService {
-    private transactionDao transactionDao;
+    private final transactionDao transactionDao;
 
     @Autowired
     public transactionService(com.onlinebanking.dbmsonlinebanking.dao.transactionDao transactionDao) {
@@ -18,4 +18,11 @@ public class transactionService {
     public primaryAccountTransaction sendMoneyPtoOut(primaryAccountTransaction pat) {
         return transactionDao.primaryToExternal(pat);
     }
+
+    public primaryAccountTransaction primaryDeposit(primaryAccountTransaction pat) {
+        return transactionDao.primaryDeposit(pat);
+    }
+
+    //public primaryAccountTransaction
+
 }

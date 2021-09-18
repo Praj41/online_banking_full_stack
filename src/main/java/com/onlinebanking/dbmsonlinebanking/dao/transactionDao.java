@@ -37,4 +37,24 @@ public class transactionDao {
                 }, pat.getPrimaryAccountId());
 
     }
+
+    public primaryAccountTransaction primaryDeposit(primaryAccountTransaction pat) {
+        String sql = "CALL transactDeposit(?, ?)";
+        jdbcTemplate.update(sql, pat.getAmount(), pat.getPrimaryAccountId());
+
+        sql = "SELECT * FROM primary_transaction WHERE primary_account_id = ? ORDER BY id DESC LIMIT 1";
+
+        return jdbcTemplate.queryForObject(sql,
+                (resultSet, i) -> {
+                    return new primaryAccountTransaction(
+                            resultSet.getLong(1),
+                            resultSet.getDouble(2),
+                            (Double.parseDouble(resultSet.getString(3))),
+                            resultSet.getTimestamp(4),
+                            resultSet.getString(5),
+                            resultSet.getString(6),
+                            resultSet.getString(7),
+                            resultSet.getLong(8));
+                }, pat.getPrimaryAccountId());
+    }
 }

@@ -21,4 +21,9 @@ public class TransactionController {
         return transactionService.sendMoneyPtoOut(PAT);
     }
 
+    @PostMapping(path = "Pdeposit")
+    public primaryAccountTransaction Pdeposit(@RequestBody primaryAccountTransaction PAT) {
+        return transactionService.primaryDeposit(PAT);
+    }
+
 }
