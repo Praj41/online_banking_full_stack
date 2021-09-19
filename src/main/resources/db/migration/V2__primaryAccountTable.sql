@@ -1,6 +1,29 @@
+CREATE PROCEDURE insertpri(IN _account_balance DECIMAL(10, 2))
+BEGIN
+    DECLARE getcount INT;
+
+    SET getcount = (SELECT COUNT(*) FROM primary_account) + 101;
+
+    INSERT INTO primary_account (id, account_balance) VALUES (getcount, _account_balance);
+END;
+
+CREATE PROCEDURE insertUser(IN _email varchar(255),
+                            IN _enabled bit(1),
+                            IN _first_name varchar(255),
+                            IN _last_name varchar(255),
+                            IN _password varchar(255),
+                            IN _phone varchar(255),
+                            IN _username varchar(255))
+BEGIN
+    DECLARE pid BIGINT;
+    SET pid = (SELECT account_number FROM primary_account WHERE id = ((SELECT COUNT(*) FROM primary_account) + 100));
+    INSERT INTO customer (email, enabled, first_name, last_name, password, phone, username, primary_account_id, loan_account_id)
+    VALUES (_email, _enabled, _first_name, _last_name, _password, _phone, _username, pid, NULL);
+END;
+
 CREATE TRIGGER balUp
     AFTER INSERT
-    ON primary_transaction
+    ON transaction
     FOR EACH ROW
 BEGIN
     IF NEW.type = 'PE' THEN
@@ -24,22 +47,23 @@ BEGIN
     SELECT account_balance INTO bal FROM primary_account WHERE account_number = priaccid;
     SET bal = bal - _amount;
 
-    INSERT INTO primary_transaction (amount, available_balance, date, description, type, primary_account_id)
+    INSERT INTO transaction (amount, available_balance, date, description, type, primary_account_id)
     VALUES (_amount, bal, sysdate(), 'Transfer From Primary Account to External', 'PE', priaccid);
 
     SELECT account_balance INTO bal1 FROM primary_account WHERE account_number = priaccid;
 
     IF bal1 = bal THEN
-        UPDATE primary_transaction SET status = 'Success' WHERE primary_account_id = priaccid;
+        UPDATE transaction SET status = 'Success' WHERE primary_account_id = priaccid;
     ELSE
-        SELECT id INTO priaccid FROM primary_transaction WHERE primary_account_id = priaccid ORDER BY id DESC LIMIT 1;
-        UPDATE primary_transaction SET status = 'Fail' WHERE id = priaccid;
-        UPDATE primary_transaction SET description = 'Insufficient Balance' WHERE id = priaccid;
-        UPDATE primary_transaction SET description = 'Insufficient Balance' WHERE id = priaccid;
-        UPDATE primary_transaction SET available_balance = bal1 WHERE id = priaccid;
+        SELECT id INTO priaccid FROM transaction WHERE primary_account_id = priaccid ORDER BY id DESC LIMIT 1;
+        UPDATE transaction
+        SET available_balance = bal1,
+            description       = 'Insufficient Balance',
+            status            = 'Fail'
+        WHERE id = priaccid;
     end if;
 
-end;
+END;
 
 CREATE PROCEDURE transactDeposit(IN _amount DOUBLE, priaccid BIGINT)
 BEGIN
@@ -47,7 +71,7 @@ BEGIN
     SELECT account_balance INTO bal FROM primary_account WHERE account_number = priaccid;
     SET bal = bal + _amount;
 
-    INSERT INTO primary_transaction (amount, available_balance, date, description, status, type, primary_account_id)
+    INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id)
     VALUES (_amount, bal, sysdate(), 'Deposit Money to Primary Account.', 'Success', 'DP', priaccid);
 
-end;
+END;

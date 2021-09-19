@@ -32,8 +32,8 @@ public class User {
     @JsonProperty("pid")
     private Long primary_account_id;
 
-    @JsonProperty("sid")
-    private Long savings_account_id;
+    @JsonProperty("lid")
+    private Long loan_account_id;
 
     public User(Long user_id,
                 String email,
@@ -54,7 +54,7 @@ public class User {
         this.phone = phone;
         this.username = username;
         this.primary_account_id = primary_account_id;
-        this.savings_account_id = savings_account_id;
+        this.loan_account_id = savings_account_id;
     }
 
     public Long getUser_id() {
@@ -129,11 +129,11 @@ public class User {
         this.primary_account_id = primary_account_id;
     }
 
-    public Long getSavings_account_id() {
-        return savings_account_id;
+    public Long getLoan_account_id() {
+        return loan_account_id;
     }
 
-    public void setSavings_account_id(Long savings_account_id) {
-        this.savings_account_id = savings_account_id;
+    public void setLoan_account_id(Long loan_account_id) {
+        this.loan_account_id = loan_account_id;
     }
 }

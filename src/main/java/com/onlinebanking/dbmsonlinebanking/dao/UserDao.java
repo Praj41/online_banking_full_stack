@@ -33,7 +33,7 @@ public class UserDao {
     }
 
     public List<User> selectAllUser() {
-        String sql = "SELECT * FROM user";
+        String sql = "SELECT * FROM customer";
         List<User> users = jdbcTemplate.query(sql, (resultSet, i) -> {
             return new User(
                     resultSet.getLong("user_id"),
@@ -45,13 +45,13 @@ public class UserDao {
                     resultSet.getString("phone"),
                     resultSet.getString("username"),
                     resultSet.getLong("primary_account_id"),
-                    resultSet.getLong("savings_account_id"));
+                    resultSet.getLong("loan_account_id"));
         });
         return users;
     }
 
     public Optional<User> selectUserById(Long user_id) {
-        String sql = "SELECT * FROM user WHERE user_id = ?";
+        String sql = "SELECT * FROM customer WHERE user_id = ?";
         User user;
         try {
             user = jdbcTemplate.queryForObject(sql,
@@ -66,7 +66,7 @@ public class UserDao {
                                 resultSet.getString("phone"),
                                 resultSet.getString("username"),
                                 resultSet.getLong("primary_account_id"),
-                                resultSet.getLong("savings_account_id"));
+                                resultSet.getLong("loan_account_id"));
                     }, user_id);
         } catch (EmptyResultDataAccessException exp) {
             return Optional.empty();
@@ -83,7 +83,7 @@ public class UserDao {
     }
 
     public Optional<User> selectUserByUsername(String username) {
-        String sql = "SELECT * FROM user WHERE username = ?";
+        String sql = "SELECT * FROM customer WHERE username = ?";
         User user;
         try {
             user = jdbcTemplate.queryForObject(sql,
@@ -98,7 +98,7 @@ public class UserDao {
                                 resultSet.getString("phone"),
                                 resultSet.getString("username"),
                                 resultSet.getLong("primary_account_id"),
-                                resultSet.getLong("savings_account_id"));
+                                resultSet.getLong("loan_account_id"));
                     }, username);
         } catch (EmptyResultDataAccessException exc) {
             System.out.println("EmptyResultDataAccessException Handled");

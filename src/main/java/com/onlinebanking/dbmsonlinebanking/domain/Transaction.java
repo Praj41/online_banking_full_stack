@@ -2,10 +2,9 @@ package com.onlinebanking.dbmsonlinebanking.domain;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-public class primaryAccountTransaction {
+public class Transaction {
 
     @JsonProperty("id")
     Long id;
@@ -31,14 +30,18 @@ public class primaryAccountTransaction {
     @JsonProperty("primary_account_id")
     Long primaryAccountId;
 
-    public primaryAccountTransaction(Long id,
-                                     double amount,
-                                     double availableBalance,
-                                     Timestamp date,
-                                     String description,
-                                     String status,
-                                     String type,
-                                     Long primaryAccountId) {
+    @JsonProperty("loan_account_id")
+    Long loanAccountId;
+
+    public Transaction(Long id,
+                       double amount,
+                       double availableBalance,
+                       Timestamp date,
+                       String description,
+                       String status,
+                       String type,
+                       Long primaryAccountId,
+                       Long loanAccountId) {
         this.id = id;
         this.amount = amount;
         this.availableBalance = availableBalance;
@@ -47,6 +50,15 @@ public class primaryAccountTransaction {
         this.status = status;
         this.type = type;
         this.primaryAccountId = primaryAccountId;
+        this.loanAccountId = loanAccountId;
+    }
+
+    public Long getLoanAccountId() {
+        return loanAccountId;
+    }
+
+    public void setLoanAccountId(Long loanAccountId) {
+        this.loanAccountId = loanAccountId;
     }
 
     public Long getId() {

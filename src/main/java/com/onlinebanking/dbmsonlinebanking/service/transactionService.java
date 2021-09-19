@@ -1,7 +1,7 @@
 package com.onlinebanking.dbmsonlinebanking.service;
 
 import com.onlinebanking.dbmsonlinebanking.dao.transactionDao;
-import com.onlinebanking.dbmsonlinebanking.domain.primaryAccountTransaction;
+import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,11 +15,11 @@ public class transactionService {
     }
 
 
-    public primaryAccountTransaction sendMoneyPtoOut(primaryAccountTransaction pat) {
+    public Transaction sendMoneyPtoOut(Transaction pat) {
         return transactionDao.primaryToExternal(pat);
     }
 
-    public primaryAccountTransaction primaryDeposit(primaryAccountTransaction pat) {
+    public Transaction primaryDeposit(Transaction pat) {
         return transactionDao.primaryDeposit(pat);
     }
 

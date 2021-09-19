@@ -1,6 +1,6 @@
 package com.onlinebanking.dbmsonlinebanking.api;
 
-import com.onlinebanking.dbmsonlinebanking.domain.primaryAccountTransaction;
+import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
 import com.onlinebanking.dbmsonlinebanking.service.transactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,12 +17,12 @@ public class TransactionController {
     }
 
     @PostMapping(path = "PtoOut")
-    public primaryAccountTransaction sendMoneyOut(@RequestBody primaryAccountTransaction PAT) {
+    public Transaction sendMoneyOut(@RequestBody Transaction PAT) {
         return transactionService.sendMoneyPtoOut(PAT);
     }
 
     @PostMapping(path = "Pdeposit")
-    public primaryAccountTransaction Pdeposit(@RequestBody primaryAccountTransaction PAT) {
+    public Transaction Pdeposit(@RequestBody Transaction PAT) {
         return transactionService.primaryDeposit(PAT);
     }
 

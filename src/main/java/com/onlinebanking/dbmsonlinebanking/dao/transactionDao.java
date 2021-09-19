@@ -1,11 +1,9 @@
 package com.onlinebanking.dbmsonlinebanking.dao;
 
-import com.onlinebanking.dbmsonlinebanking.domain.primaryAccountTransaction;
+import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-
-import java.math.BigDecimal;
 
 @Repository
 public class transactionDao {
@@ -17,36 +15,25 @@ public class transactionDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public primaryAccountTransaction primaryToExternal(primaryAccountTransaction pat) {
+    public Transaction primaryToExternal(Transaction pat) {
         String sql = "CALL transactPE(?, ?)";
-        jdbcTemplate.update(sql, pat.getAmount(), pat.getPrimaryAccountId());
-
-        sql = "SELECT * FROM primary_transaction WHERE primary_account_id = ? ORDER BY id DESC LIMIT 1";
-
-        return jdbcTemplate.queryForObject(sql,
-                (resultSet, i) -> {
-                    return new primaryAccountTransaction(
-                            resultSet.getLong(1),
-                            resultSet.getDouble(2),
-                            (Double.parseDouble(resultSet.getString(3))),
-                            resultSet.getTimestamp(4),
-                            resultSet.getString(5),
-                            resultSet.getString(6),
-                            resultSet.getString(7),
-                            resultSet.getLong(8));
-                }, pat.getPrimaryAccountId());
+        return getTransaction(pat, sql);
 
     }
 
-    public primaryAccountTransaction primaryDeposit(primaryAccountTransaction pat) {
+    public Transaction primaryDeposit(Transaction pat) {
         String sql = "CALL transactDeposit(?, ?)";
+        return getTransaction(pat, sql);
+    }
+
+    private Transaction getTransaction(Transaction pat, String sql) {
         jdbcTemplate.update(sql, pat.getAmount(), pat.getPrimaryAccountId());
 
-        sql = "SELECT * FROM primary_transaction WHERE primary_account_id = ? ORDER BY id DESC LIMIT 1";
+        sql = "SELECT * FROM transaction WHERE primary_account_id = ? ORDER BY id DESC LIMIT 1";
 
         return jdbcTemplate.queryForObject(sql,
                 (resultSet, i) -> {
-                    return new primaryAccountTransaction(
+                    return new Transaction(
                             resultSet.getLong(1),
                             resultSet.getDouble(2),
                             (Double.parseDouble(resultSet.getString(3))),
@@ -54,7 +41,8 @@ public class transactionDao {
                             resultSet.getString(5),
                             resultSet.getString(6),
                             resultSet.getString(7),
-                            resultSet.getLong(8));
+                            resultSet.getLong(8),
+                            resultSet.getLong(9));
                 }, pat.getPrimaryAccountId());
     }
 }
