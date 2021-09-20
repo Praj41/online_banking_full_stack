@@ -34,4 +34,20 @@ public class loanDao {
 
     }
 
+    public loanAccount getLoan(double loanTotal, int years, Long accountNumber) {
+
+        String sql = "CALL loanReq(?, ?, ?)";
+
+        return jdbcTemplate.queryForObject(sql,
+                (resultSet, i) -> {
+                    return new loanAccount(
+                            resultSet.getLong(1),
+                            Double.parseDouble(resultSet.getString(2)),
+                            Double.parseDouble(resultSet.getString(3)),
+                            Float.parseFloat(resultSet.getString(4)),
+                            resultSet.getInt(5),
+                            resultSet.getLong(6));
+                }, loanTotal, years, accountNumber);
+
+    }
 }

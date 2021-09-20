@@ -19,4 +19,8 @@ public class loanService {
         return loanDao.createLoanAccount(userId);
     }
 
+
+    public loanAccount getLoan(loanAccount loan) {
+        return loanDao.getLoan(loan.getLoanTotal(), loan.getYears(), loan.getAccountNumber());
+    }
 }

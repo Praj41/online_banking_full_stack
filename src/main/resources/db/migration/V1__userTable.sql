@@ -10,7 +10,7 @@ CREATE TABLE loan_account
     id             BIGINT             NOT NULL,
     loan_balance   DECIMAL(10, 2) DEFAULT NULL CHECK ( loan_balance >= 0.0 ),
     loan_total     DECIMAL(10, 2) DEFAULT NULL CHECK ( loan_total >= 0.0 ),
-    rate           DECIMAL(2, 2)  DEFAULT NULL,
+    rate           DECIMAL(10, 2)  DEFAULT NULL,
     years          INT            DEFAULT NULL CHECK ( years >= 0 ),
     account_number BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT
 );

@@ -33,7 +33,7 @@ BEGIN
             SET account_balance = account_balance - NEW.amount
             WHERE account_number = NEW.primary_account_id;
         END IF;
-    ELSE
+    ELSEIF NOT NEW.type = 'LF' THEN
         UPDATE primary_account
         SET account_balance = account_balance + NEW.amount
         WHERE account_number = NEW.primary_account_id;
@@ -96,4 +96,44 @@ BEGIN
 
         SELECT * FROM loan_account WHERE account_number = var;
     END IF;
+END;
+
+CREATE PROCEDURE loanReq(IN amount DECIMAL(10, 2), IN period INT, IN accno BIGINT)
+BEGIN
+    DECLARE bal DECIMAL(10, 2);
+    DECLARE pid BIGINT;
+
+    SELECT primary_account_id INTO pid FROM customer WHERE customer.loan_account_id = accno;
+
+    IF NOT (SELECT loan_balance FROM loan_account WHERE account_number = accno) > 0.0 THEN
+        UPDATE loan_account
+        SET loan_balance = amount,
+            loan_total   = amount,
+            rate         = 7.5,
+            years        = period
+        WHERE account_number = accno;
+
+        SELECT account_balance
+        INTO bal
+        FROM primary_account,
+             customer,
+             loan_account
+        WHERE loan_account.account_number = accno
+          AND primary_account.account_number = customer.primary_account_id
+          AND loan_account.account_number = customer.loan_account_id;
+
+        SET bal = bal + amount;
+
+        INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
+                                 loan_account_id)
+        VALUES (amount, bal, sysdate(), 'Money Deposited into primary account', 'Loan Approved', 'LA', pid, accno);
+
+    ELSE
+        INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id, loan_account_id)
+        VALUES (amount, bal, sysdate(), 'Loan Already Exists Pay it off', 'Loan Not Approved', 'LF', pid, accno);
+
+    END IF;
+
+    SELECT * FROM loan_account WHERE account_number = accno;
+
 END;

@@ -21,4 +21,10 @@ public class loanController {
     public loanAccount getPAccountDetails(@PathVariable("id") Long userId) {
         return loanService.createLoanAcc(userId);
     }
+
+    @PostMapping(path = "get")
+    public loanAccount getLoan(@RequestBody loanAccount loan) {
+        return loanService.getLoan(loan);
+    }
+
 }
