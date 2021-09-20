@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+
 @Repository
 public class primaryAccountDao {
 
@@ -36,6 +37,7 @@ public class primaryAccountDao {
                                 resultSet.getLong("account_number"));
                     }, accountId);
         } catch (EmptyResultDataAccessException exc) {
+            System.out.println("EmptyResultDataAccessException Handled");
             return null;
         }
         return primaryAcc;

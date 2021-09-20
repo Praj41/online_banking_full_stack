@@ -23,6 +23,5 @@ public class transactionService {
         return transactionDao.primaryDeposit(pat);
     }
 
-    //public primaryAccountTransaction
 
 }

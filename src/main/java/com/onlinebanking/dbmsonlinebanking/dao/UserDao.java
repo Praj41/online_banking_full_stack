@@ -69,6 +69,7 @@ public class UserDao {
                                 resultSet.getLong("loan_account_id"));
                     }, user_id);
         } catch (EmptyResultDataAccessException exp) {
+            System.out.println("EmptyResultDataAccessException Handled");
             return Optional.empty();
         }
         return Optional.ofNullable(user);

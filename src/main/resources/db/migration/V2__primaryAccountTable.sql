@@ -75,3 +75,25 @@ BEGIN
     VALUES (_amount, bal, sysdate(), 'Deposit Money to Primary Account.', 'Success', 'DP', priaccid);
 
 END;
+
+CREATE PROCEDURE createLoan(IN uid BIGINT)
+BEGIN
+    DECLARE var BIGINT;
+
+    IF ((SELECT loan_account_id FROM customer WHERE user_id = uid) IS NULL) THEN
+
+        SET var = (SELECT COUNT(*) FROM loan_account) + 101;
+        INSERT INTO loan_account (id, loan_balance, loan_total, rate, years)
+        VALUES (var, 0.0, 0.0, 0.0, 0);
+
+        SELECT * FROM loan_account WHERE id = var;
+
+        SELECT account_number INTO var FROM loan_account WHERE id = var;
+
+        UPDATE customer SET loan_account_id = var WHERE user_id = uid;
+    ELSE
+        SELECT loan_account_id INTO var FROM customer WHERE user_id = uid;
+
+        SELECT * FROM loan_account WHERE account_number = var;
+    END IF;
+END;
