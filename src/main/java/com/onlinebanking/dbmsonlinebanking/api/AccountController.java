@@ -23,9 +23,9 @@ public class AccountController {
         return accountService.authLogin(user);
     }
 
-    @GetMapping
-    public User userSelect() {
-        return accountService.selectUser();
+    @GetMapping(path = "{id}")
+    public User userSelect(@PathVariable("id") Long userId) {
+        return accountService.selectUser(userId);
     }
 
     @GetMapping(path = "PAccount/{id}")

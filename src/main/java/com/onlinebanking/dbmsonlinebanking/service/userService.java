@@ -27,7 +27,10 @@ public class userService {
     }
 
     public Optional<User> getUserById(Long user_id) {
-        return userDao.selectUserById(user_id);
+
+        Optional<User> user = userDao.selectUserById(user_id);
+
+        return user;
     }
 
     public int disableUserById(Long user_id) {

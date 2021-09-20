@@ -5,6 +5,9 @@ import com.onlinebanking.dbmsonlinebanking.domain.User;
 import com.onlinebanking.dbmsonlinebanking.domain.primaryAccount;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
+
+import java.util.Optional;
 
 @Service
 public class accountService {
@@ -37,8 +40,9 @@ public class accountService {
         }
     }
 
-    public User selectUser() {
-        return userService.getUserById(5L).get();
+    public User selectUser(Long userId) {
+        Optional<User> user = userService.getUserById(userId);
+        return user.orElse(null);
     }
 
     public primaryAccount getPInfoById(Long accountId) {

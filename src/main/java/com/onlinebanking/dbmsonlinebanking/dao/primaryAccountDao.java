@@ -31,7 +31,7 @@ public class primaryAccountDao {
             primaryAcc = jdbcTemplate.queryForObject(sql,
                     (resultSet, i) -> {
                         return new primaryAccount(
-                                resultSet.getLong("user_id"),
+                                resultSet.getLong("id"),
                                 Double.parseDouble(resultSet.getString("account_balance")),
                                 resultSet.getLong("account_number"));
                     }, accountId);
