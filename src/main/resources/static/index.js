@@ -19,24 +19,16 @@ function login() {
         "pass" : ""
     }
 
-    var abc = {
-        "email" : "",
-        "fname" : "",
-        "lname" :  "",
-        "pass" : "",
-        "ph" :  "",
-        "username" : ""
-    }
-
-    abc.email = document.getElementById("email").value;
-
-
-    cred.username = document.getElementById("username").value;
-    cred.pass = document.getElementById("password").value;
+    cred.username = document.getElementById("inputEmail").value;
+    cred.pass = document.getElementById("inputPassword").value;
 
     loginRequest.open('POST', 'http://localhost:8080/api/v1/user/login');
     loginRequest.setRequestHeader("Content-Type", "application/json");
 
-    loginRequest.send(JSON.stringify(abc));
+    loginRequest.send(JSON.stringify(cred));
 
+}
+
+function signup() {
+    window.location.replace("signup.html");
 }

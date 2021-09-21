@@ -5,6 +5,8 @@ import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class transactionService {
     private final transactionDao transactionDao;
@@ -24,4 +26,7 @@ public class transactionService {
     }
 
 
+    public List<Transaction> selectTransactionsByAccno(Long accountNo) {
+        return transactionDao.selectTransactions(accountNo);
+    }
 }

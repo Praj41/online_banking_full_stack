@@ -5,6 +5,8 @@ import com.onlinebanking.dbmsonlinebanking.service.transactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("api/v1/transaction")
 @RestController
 @CrossOrigin
@@ -24,6 +26,11 @@ public class TransactionController {
     @PostMapping(path = "Pdeposit")
     public Transaction Pdeposit(@RequestBody Transaction PAT) {
         return transactionService.primaryDeposit(PAT);
+    }
+
+    @GetMapping(path = "{id}")
+    public List<Transaction> getTransactions(@PathVariable("id") Long accountNo) {
+        return transactionService.selectTransactionsByAccno(accountNo);
     }
 
 }

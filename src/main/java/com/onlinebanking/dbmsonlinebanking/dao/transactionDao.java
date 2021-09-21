@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class transactionDao {
 
@@ -44,5 +46,23 @@ public class transactionDao {
                             resultSet.getLong(8),
                             resultSet.getLong(9));
                 }, pat.getPrimaryAccountId());
+    }
+
+    public List<Transaction> selectTransactions(Long accountNo) {
+        String sql = "SELECT * FROM transaction WHERE primary_account_id = ?";
+
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return new Transaction(
+                    resultSet.getLong(1),
+                    resultSet.getDouble(2),
+                    (Double.parseDouble(resultSet.getString(3))),
+                    resultSet.getTimestamp(4),
+                    resultSet.getString(5),
+                    resultSet.getString(6),
+                    resultSet.getString(7),
+                    resultSet.getLong(8),
+                    resultSet.getLong(9));
+        }, accountNo);
+
     }
 }
