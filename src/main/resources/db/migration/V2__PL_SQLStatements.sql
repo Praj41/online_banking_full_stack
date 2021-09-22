@@ -141,3 +141,35 @@ BEGIN
     SELECT * FROM loan_account WHERE account_number = accno;
 
 END;
+
+CREATE TRIGGER usrtransaction
+    BEFORE INSERT
+    ON transactionbtwuser
+    FOR EACH ROW
+BEGIN
+    DECLARE bal DECIMAL(10, 2);
+
+    SELECT account_balance INTO bal FROM primary_account WHERE account_number = NEW.from_account_id;
+
+    SET NEW.date = sysdate();
+
+    IF NEW.to_account_id IS NULL THEN
+        SET NEW.status = 'Failed';
+
+    ELSEIF bal < NEW.amount THEN
+        SET NEW.status = 'Failed';
+        SET NEW.description = 'Insufficient Balance at sender';
+    ELSE
+        UPDATE primary_account
+        SET account_balance = account_balance - NEW.amount
+        WHERE account_number = NEW.from_account_id;
+
+        UPDATE primary_account
+        SET account_balance = account_balance + NEW.amount
+        WHERE account_number = NEW.to_account_id;
+
+        SET NEW.status = 'Success';
+        SET NEW.description = 'Amount Transfer Complete';
+    END IF;
+
+END;

@@ -1,6 +1,7 @@
 package com.onlinebanking.dbmsonlinebanking.api;
 
 import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
+import com.onlinebanking.dbmsonlinebanking.domain.TransactionBtwUser;
 import com.onlinebanking.dbmsonlinebanking.service.transactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,11 @@ public class TransactionController {
     @GetMapping(path = "{id}")
     public List<Transaction> getTransactions(@PathVariable("id") Long accountNo) {
         return transactionService.selectTransactionsByAccno(accountNo);
+    }
+
+    @PostMapping(path = "transfer")
+    public TransactionBtwUser UserToUser(@RequestBody TransactionBtwUser trans){
+        return transactionService.btwUser(trans);
     }
 
 }

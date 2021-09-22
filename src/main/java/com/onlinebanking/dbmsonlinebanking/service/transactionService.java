@@ -2,6 +2,7 @@ package com.onlinebanking.dbmsonlinebanking.service;
 
 import com.onlinebanking.dbmsonlinebanking.dao.transactionDao;
 import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
+import com.onlinebanking.dbmsonlinebanking.domain.TransactionBtwUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,5 +29,9 @@ public class transactionService {
 
     public List<Transaction> selectTransactionsByAccno(Long accountNo) {
         return transactionDao.selectTransactions(accountNo);
+    }
+
+    public TransactionBtwUser btwUser(TransactionBtwUser trans) {
+        return transactionDao.btwUser(trans);
     }
 }

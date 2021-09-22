@@ -1,11 +1,16 @@
 package com.onlinebanking.dbmsonlinebanking.dao;
 
 import com.onlinebanking.dbmsonlinebanking.domain.Transaction;
+import com.onlinebanking.dbmsonlinebanking.domain.TransactionBtwUser;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Locale;
 
 @Repository
 public class transactionDao {
@@ -64,5 +69,31 @@ public class transactionDao {
                     resultSet.getLong(9));
         }, accountNo);
 
+    }
+
+    public TransactionBtwUser btwUser(TransactionBtwUser trans) {
+        String sql = "INSERT INTO transactionbtwuser (amount, to_account_id, from_account_id) VALUES (?, ?, ?)";
+
+        try {
+            jdbcTemplate.update(sql, trans.getAmount(), trans.getToAccountId(), trans.getFromAccountId());
+        } catch (DataIntegrityViolationException e) {
+            System.out.println(e.getLocalizedMessage());
+            sql = "INSERT INTO transactionbtwuser (amount, description, from_account_id) VALUES (?, ?, ?)";
+            jdbcTemplate.update(sql, trans.getAmount(), trans.getToAccountId() + " does Not Exist", trans.getFromAccountId());
+        }
+
+        sql = "SELECT * FROM transactionbtwuser WHERE from_account_id = ? ORDER BY id DESC LIMIT 1";
+
+        return jdbcTemplate.queryForObject(sql, (resultSet, i) -> {
+            return new TransactionBtwUser(
+                    resultSet.getLong(1),
+                    resultSet.getDouble(2),
+                    resultSet.getTimestamp(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5),
+                    resultSet.getLong(6),
+                    resultSet.getLong(7)
+            );
+        }, trans.getFromAccountId());
     }
 }

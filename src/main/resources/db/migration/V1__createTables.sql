@@ -10,7 +10,7 @@ CREATE TABLE loan_account
     id             BIGINT             NOT NULL,
     loan_balance   DECIMAL(10, 2) DEFAULT NULL CHECK ( loan_balance >= 0.0 ),
     loan_total     DECIMAL(10, 2) DEFAULT NULL CHECK ( loan_total >= 0.0 ),
-    rate           DECIMAL(10, 2)  DEFAULT NULL,
+    rate           DECIMAL(10, 2) DEFAULT NULL,
     years          INT            DEFAULT NULL CHECK ( years >= 0 ),
     account_number BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT
 );
@@ -26,7 +26,7 @@ CREATE TABLE customer
     phone              varchar(255) DEFAULT NULL,
     username           varchar(255) DEFAULT NULL,
     primary_account_id BIGINT       DEFAULT NULL,
-    loan_account_id BIGINT       DEFAULT NULL,
+    loan_account_id    BIGINT       DEFAULT NULL,
     UNIQUE KEY `UK_user_email` (`email`),
     CONSTRAINT FK_usrpriacc FOREIGN KEY (primary_account_id) REFERENCES primary_account (account_number),
     CONSTRAINT FK_usrloanacc FOREIGN KEY (loan_account_id) REFERENCES loan_account (account_number)
@@ -48,6 +48,22 @@ CREATE TABLE transaction
     CONSTRAINT FK_accid_priTrans FOREIGN KEY (primary_account_id) REFERENCES primary_account (account_number),
     CONSTRAINT FK_accid_loanTrans FOREIGN KEY (loan_account_id) REFERENCES loan_account (account_number)
 );
+
+CREATE TABLE transactionbtwuser
+(
+    id              BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    amount          DECIMAL(10, 2) DEFAULT NULL CHECK ( amount >= 0.0 ),
+    date            DATETIME,
+    description     VARCHAR(30)    DEFAULT NULL,
+    status          VARCHAR(30)    DEFAULT NULL,
+    to_account_id   BIGINT         DEFAULT NULL,
+    from_account_id BIGINT         DEFAULT NULL,
+    CONSTRAINT FK_toacc FOREIGN KEY (to_account_id) REFERENCES customer (primary_account_id),
+    CONSTRAINT FK_fromacc FOREIGN KEY (from_account_id) REFERENCES customer (primary_account_id)
+);
+
+ALTER TABLE transactionbtwuser
+    AUTO_INCREMENT = 1;
 
 ALTER TABLE primary_account
     AUTO_INCREMENT = 1121000001;
