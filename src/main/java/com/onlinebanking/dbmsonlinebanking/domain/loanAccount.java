@@ -46,11 +46,11 @@ public class loanAccount {
         this.id = id;
     }
 
-    public double getLoanBalance() {
+    public Double getLoanBalance() {
         return loanBalance;
     }
 
-    public void setLoanBalance(double loanBalance) {
+    public void setLoanBalance(Double loanBalance) {
         this.loanBalance = loanBalance;
     }
 

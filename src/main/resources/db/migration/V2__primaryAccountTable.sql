@@ -44,16 +44,20 @@ CREATE PROCEDURE transactPE(IN _amount DOUBLE, priaccid BIGINT)
 BEGIN
     DECLARE bal DECIMAL(19, 2);
     DECLARE bal1 DECIMAL(19, 2);
+
+    DECLARE date1 DATETIME;
+    SET date1 = sysdate();
+
     SELECT account_balance INTO bal FROM primary_account WHERE account_number = priaccid;
     SET bal = bal - _amount;
 
     INSERT INTO transaction (amount, available_balance, date, description, type, primary_account_id)
-    VALUES (_amount, bal, sysdate(), 'Transfer From Primary Account to External', 'PE', priaccid);
+    VALUES (_amount, bal, date1, 'Transfer From Primary Account to External', 'PE', priaccid);
 
     SELECT account_balance INTO bal1 FROM primary_account WHERE account_number = priaccid;
 
     IF bal1 = bal THEN
-        UPDATE transaction SET status = 'Success' WHERE primary_account_id = priaccid;
+        UPDATE transaction SET status = 'Success' WHERE primary_account_id = priaccid AND date = date1;
     ELSE
         SELECT id INTO priaccid FROM transaction WHERE primary_account_id = priaccid ORDER BY id DESC LIMIT 1;
         UPDATE transaction
@@ -104,6 +108,14 @@ BEGIN
     DECLARE pid BIGINT;
 
     SELECT primary_account_id INTO pid FROM customer WHERE customer.loan_account_id = accno;
+    SELECT account_balance
+    INTO bal
+    FROM primary_account,
+         customer,
+         loan_account
+    WHERE loan_account.account_number = accno
+      AND primary_account.account_number = customer.primary_account_id
+      AND loan_account.account_number = customer.loan_account_id;
 
     IF NOT (SELECT loan_balance FROM loan_account WHERE account_number = accno) > 0.0 THEN
         UPDATE loan_account
@@ -113,15 +125,6 @@ BEGIN
             years        = period
         WHERE account_number = accno;
 
-        SELECT account_balance
-        INTO bal
-        FROM primary_account,
-             customer,
-             loan_account
-        WHERE loan_account.account_number = accno
-          AND primary_account.account_number = customer.primary_account_id
-          AND loan_account.account_number = customer.loan_account_id;
-
         SET bal = bal + amount;
 
         INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
@@ -129,7 +132,8 @@ BEGIN
         VALUES (amount, bal, sysdate(), 'Money Deposited into primary account', 'Loan Approved', 'LA', pid, accno);
 
     ELSE
-        INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id, loan_account_id)
+        INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
+                                 loan_account_id)
         VALUES (amount, bal, sysdate(), 'Loan Already Exists Pay it off', 'Loan Not Approved', 'LF', pid, accno);
 
     END IF;
