@@ -10,7 +10,7 @@ function login() {
             alert("login failed");
         } else {
             alert("login success");
-            window.location.replace("jsontable.html?id="+loginRequest.responseText);
+            window.location.replace("user_homepage.html?id="+loginRequest.responseText);
         }
     };
 

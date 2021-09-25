@@ -1,0 +1,65 @@
+th{
+    color:black;
+  }
+td{
+  background-color:white;
+}
+
+  body {
+
+  background-color: #006666;
+  }
+  .heading{
+    text-align: center;
+    width:20px;
+    height:20px;
+    top:2%;
+    margin-left:3%;
+  }
+  h1{
+    font-size: 3rem;
+      color: #DBEDF3;
+      font-family: "Arvo", cursive;
+      text-shadow: 3px 0 #DA0463;
+  }
+  button{
+    top:10%;
+    background-color:silver;
+    transition-duration: 0.4s;
+    border-radius:12px;
+    width:200px;
+    height:50px;
+    margin:-20px 100px 25px 0px;
+  }
+
+  button:hover {
+    background-color: black;
+    color: white;
+
+  }
+
+  .bt{
+    margin-top:0;
+    right:2%;
+    margin:-40px 100px 100px 10px;
+  }
+  .img{
+    position:absolute;
+    top:35%;
+    right:2.5%;
+  
+  }
+  .logout{
+    margin-left:95%;
+    float:right;
+
+  }
+  .user
+  {
+    margin-top:2%;
+    margin-left:50%;
+  }
+  #user_data{
+  font-size:25px;
+  color:white;
+  }
