@@ -25,7 +25,7 @@
         </div>
 
           <div class="logout">
-          <button type="submit">Log Out</button>
+          <button type="submit" onclick="logout()">Log Out</button>
           </div>
           <div class="user">
               <p id="user_data">
@@ -34,13 +34,13 @@
           </div>
           <div class="bt">
           <button type="button" onclick="transact()">View Individual Transaction</button><br />
-          <button type="submit">View user to user transaction</button><br />
-          <button type="submit">View account balance</button><br />
-          <button type="submit">Get Loan</button><br />
-          <button type="submit">Send money to another account</button><br />
-          <button type="submit">Deposit Money</button><br />
-          <button type="submit">Withdraw Money</button><br />
-          <button type="submit">Get Loan</button><br />
+          <button type="button" onclick="utrans()">View user to user transaction</button><br />
+          <button type="button" onclick="view()">View Loan Info</button><br />
+          <button type="button" onclick="getloan()">Get Loan</button><br />
+          <button type="button" onclick="utu()">Send money to another account</button><br />
+          <button type="button" onclick="deposit()">Deposit Money</button><br />
+          <button type="button" onclick="withdraw()">Withdraw Money</button><br />
+          <button type="button" onclick="payloan()">Pay Loan EMI</button><br />
           </div>
 
       <img class="img" src="https://www.bcsconsulting.com/wp-content/uploads/2018/12/bank-system-tile.png" width="50%" height="60%">

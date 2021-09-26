@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
@@ -15,30 +15,30 @@
     <!-- Custom styles for this template -->
     <link href="../static/CSS/signin.css" rel="stylesheet">
 
-    <script src="../static/JS/index.js"></script>
+    <script src="../static/JS/UTU.js"></script>
 
-  </head>
+</head>
 
-      <body>
-      <img src="https://console.kr-asia.com/wp-content/uploads/2020/02/shutterstock_1150180799.jpg" alt="" width="100%" height="75%">
-      <div class="text-center">
-      <form class="form-signin">
+<body>
+<img src="https://console.kr-asia.com/wp-content/uploads/2020/02/shutterstock_1150180799.jpg" alt="" width="100%" height="75%">
+<div class="text-center">
+    <form class="form-signin">
         <img class="mb-4" src="https://image.shutterstock.com/image-vector/vector-logo-online-bank-transfers-260nw-1515050603.jpg" alt="" width="75" height="75">
-        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <h1 class="h3 mb-3 font-weight-normal">Withdraw Amount</h1>
         <label for="inputEmail" class="sr-only">Email address</label>
-        <input type="uname" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+        <input type="number" step="0.01" min="0" id="inputEmail" class="form-control" placeholder="Amount" required autofocus>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="number" step="1" id="inputPassword" class="form-control" placeholder="To Account ID" required>
         <div class="checkbox mb-3">
-          <label>
-            <input type="checkbox" value="remember-me"> Remember me
-          </label>
+            <label>
+                <input type="checkbox" value="remember-me" id="chk" required> I, Accept
+            </label>
         </div>
-        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="login()">Sign in</button>
-        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="signup()">Sign up</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="next()">Send</button>
+        <button class="btn btn-lg btn-primary btn-block" type="button" onclick="cancel()">Cancel</button>
         <p class="mt-5 mb-3 text-muted">&copy; 2021-2022</p>
-      </form>
-      </div>
+    </form>
+</div>
 
-  </body>
+</body>
 </html>

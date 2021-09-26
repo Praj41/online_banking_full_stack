@@ -22,15 +22,13 @@ public class loanDao {
         //jdbcTemplate.update(sql, userId);
 
         return jdbcTemplate.queryForObject(sql,
-                (resultSet, i) -> {
-                    return new loanAccount(
-                            resultSet.getLong(1),
-                            Double.parseDouble(resultSet.getString(2)),
-                            Double.parseDouble(resultSet.getString(3)),
-                            Float.parseFloat(resultSet.getString(4)),
-                            resultSet.getInt(5),
-                            resultSet.getLong(6));
-                }, userId);
+                (resultSet, i) -> new loanAccount(
+                        resultSet.getLong(1),
+                        Double.parseDouble(resultSet.getString(2)),
+                        Double.parseDouble(resultSet.getString(3)),
+                        Float.parseFloat(resultSet.getString(4)),
+                        resultSet.getInt(5),
+                        resultSet.getLong(6)), userId);
 
     }
 
@@ -39,15 +37,31 @@ public class loanDao {
         String sql = "CALL loanReq(?, ?, ?)";
 
         return jdbcTemplate.queryForObject(sql,
-                (resultSet, i) -> {
-                    return new loanAccount(
-                            resultSet.getLong(1),
-                            Double.parseDouble(resultSet.getString(2)),
-                            Double.parseDouble(resultSet.getString(3)),
-                            Float.parseFloat(resultSet.getString(4)),
-                            resultSet.getInt(5),
-                            resultSet.getLong(6));
-                }, loanTotal, years, accountNumber);
+                (resultSet, i) -> new loanAccount(
+                        resultSet.getLong(1),
+                        Double.parseDouble(resultSet.getString(2)),
+                        Double.parseDouble(resultSet.getString(3)),
+                        Float.parseFloat(resultSet.getString(4)),
+                        resultSet.getInt(5),
+                        resultSet.getLong(6)), loanTotal, years, accountNumber);
+
+    }
+
+    public Transaction payEMI(Long primary_account_id, Long loan_account_id) {
+        String sql = "CALL payLoan(?, ?)";
+
+        return jdbcTemplate.queryForObject(sql,
+                (resultSet, i) -> new Transaction(
+                        resultSet.getLong(1),
+                        resultSet.getDouble(2),
+                        resultSet.getDouble(3),
+                        resultSet.getTimestamp(4),
+                        resultSet.getString(5),
+                        resultSet.getString(6),
+                        resultSet.getString(7),
+                        resultSet.getLong(8),
+                        resultSet.getLong(9)
+                ), loan_account_id, primary_account_id);
 
     }
 }

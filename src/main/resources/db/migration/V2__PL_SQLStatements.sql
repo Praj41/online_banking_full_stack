@@ -33,6 +33,12 @@ BEGIN
             SET account_balance = account_balance - NEW.amount
             WHERE account_number = NEW.primary_account_id;
         END IF;
+    ELSEIF NEW.type = 'EMI' THEN
+        IF NEW.status = 'Success' THEN
+            UPDATE primary_account
+            SET account_balance = account_balance - NEW.amount
+            WHERE account_number = NEW.primary_account_id;
+        END IF;
     ELSEIF NOT NEW.type = 'LF' THEN
         UPDATE primary_account
         SET account_balance = account_balance + NEW.amount
@@ -171,5 +177,48 @@ BEGIN
         SET NEW.status = 'Success';
         SET NEW.description = 'Amount Transfer Complete';
     END IF;
+
+END;
+
+CREATE PROCEDURE payLoan(IN laccno BIGINT, IN paccno BIGINT)
+BEGIN
+    DECLARE pay DECIMAL(10, 2);
+    DECLARE yrs INT;
+    DECLARE rt DECIMAL(10, 2);
+    DECLARE amt DECIMAL(10, 2);
+    DECLARE bal DECIMAL(10, 2);
+    DECLARE now DATETIME;
+
+    SET now = sysdate();
+    SELECT loan_total, years, rate INTO pay, yrs, rt FROM loan_account WHERE account_number = laccno;
+
+    SET rt = rt / 12;
+    SET yrs = yrs * 12;
+    SET pay = pay / yrs;
+
+    SELECT account_balance INTO amt FROM primary_account WHERE account_number = paccno;
+    SELECT loan_balance INTO bal FROM loan_account WHERE account_number = laccno;
+
+    IF bal <= pay THEN
+        INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
+                                 loan_account_id)
+        VALUES (bal, amt - bal, now, 'EMI Amount Has Been Deducted From Primary', 'Success', 'EMI', paccno, laccno);
+        UPDATE loan_account SET loan_balance = 0.0, loan_total = 0.0, rate = 0.0, years = 0 WHERE account_number = laccno;
+    ELSE
+        IF pay > amt THEN
+            INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
+                                     loan_account_id)
+            VALUES (pay, amt - pay, now, 'Insufficient Balance To pay EMI', 'Failed', 'EMI', paccno, laccno);
+        ELSE
+            UPDATE loan_account
+            SET loan_balance = loan_balance + (loan_balance * rt / 100) - pay
+            WHERE account_number = laccno;
+            INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
+                                     loan_account_id)
+            VALUES (pay, amt - pay, now, 'EMI Amount Has Been Deducted From Primary', 'Success', 'EMI', paccno, laccno);
+        END IF;
+    END IF;
+
+    SELECT * FROM transaction WHERE date = now;
 
 END;

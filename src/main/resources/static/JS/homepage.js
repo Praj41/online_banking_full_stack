@@ -1,23 +1,27 @@
 var user_data = {
-    "id": "102",
-    "email": "afas",
-    "enable": "true",
-    "fname": "qwea",
-    "lname": "cxvx",
-    "pass": "opug",
-    "ph": "652314",
-    "username": "sfgssgvs",
-    "pid": "1121000002",
+    "id": "",
+    "email": "",
+    "enable": "",
+    "fname": "",
+    "lname": "",
+    "pass": "",
+    "ph": "",
+    "username": "",
+    "pid": "",
     "lid": 0
 }
 
 var data1 = {
-    "account_number": "11210000002",
-    "account_balance": "1250.50"
+    "account_number": "",
+    "account_balance": ""
 }
 var user = document.getElementById('user_data');
-user.innerHTML = "Name : " + user_data.id + "<br>Email : " + user_data.email +
-    "<br>Phone : " + user_data.ph + "<br>Username : " + user_data.username + "<br>Account Number : " + data1.account_number + "<br>Balance : " + data1.account_balance
+function filldata() {
+    user.innerHTML = "Name : " + user_data.id + "<br>Email : " + user_data.email +
+        "<br>Phone : " + user_data.ph + "<br>Username : " + user_data.username + "<br>Account Number : " + data1.account_number + "<br>Balance : " + data1.account_balance;
+}
+
+filldata();
 
 var loginRequest = new XMLHttpRequest();
 var loginRequest1 = new XMLHttpRequest();
@@ -42,11 +46,81 @@ loginRequest.onload = function () {
 }
 
 function display() {
-    user.innerHTML = "Name : " + user_data.id + "<br>Email : " + user_data.email +
+    user.innerHTML = "Name : " + user_data.fname + " " + user_data.lname + "<br>Email : " + user_data.email +
         "<br>Phone : " + user_data.ph + "<br>Username : " + user_data.username + "<br>Account Number : " + data1.account_number + "<br>Balance : " + data1.account_balance
 
 }
 
 function transact() {
     window.location.replace("ITransactions.html?id=" + user_data.id);
+}
+function deposit() {
+    window.location.replace("deposit.html?id=" + user_data.id + "&action=Pdeposit");
+}
+function withdraw() {
+    window.location.replace("withdraw.html?id=" + user_data.id + "&action=PtoOut");
+}
+function utrans() {
+    window.location.replace("UTransactions.html?id=" + user_data.id);
+}
+function logout() {
+    window.location.replace("signin.html");
+}
+function utu() {
+    window.location.replace("UTU.html?id=" + user_data.id);
+}
+function getloan() {
+    window.location.replace("getLoan.html?id=" + user_data.id);
+}
+
+function payloan() {
+
+
+    if (user_data.lid === undefined || user_data.lid === 0) {
+        alert("Get a Loan First");
+        return;
+    }
+
+    var loginRequest2 = new XMLHttpRequest();
+    loginRequest2.open('POST', 'http://localhost:8080/api/v1/loan/emi');
+    loginRequest2.setRequestHeader("Content-Type", "application/json");
+    loginRequest2.send(JSON.stringify(user_data));
+
+
+    loginRequest2.onload = function () {
+        var tmp = JSON.parse(loginRequest2.responseText);
+        alert(tmp.status + "!!\nFor More details check History");
+        data1.account_balance = tmp.available_balance;
+        filldata();
+    }
+
+}
+
+function view() {
+    if (user_data.lid === undefined || user_data.lid === 0) {
+        alert("No Loan exist");
+        return;
+    }
+
+    var loan = {
+        "loan_total" : 0,
+        "years" : 0,
+        "account_number" : "0"
+    }
+
+    loan.account_number = user_data.lid;
+
+    var loginRequest3 = new XMLHttpRequest();
+    loginRequest3.open('POST', 'http://localhost:8080/api/v1/loan/get');
+    loginRequest3.setRequestHeader("Content-Type", "application/json");
+    loginRequest3.send(JSON.stringify(loan));
+
+    loginRequest3.onload = function () {
+        loan = JSON.parse(loginRequest3.responseText);
+        alert("Loan Remaining : " + loan.loan_balance +
+              "\nLoan Total : " + loan.loan_total +
+              "\nRate : " + loan.rate +
+              "\nFor Years : " + loan.years);
+    }
+
 }

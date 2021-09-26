@@ -96,4 +96,21 @@ public class transactionDao {
             );
         }, trans.getFromAccountId());
     }
+
+    public List<TransactionBtwUser> selectTransactionsBtwUsr(Long accountNo) {
+        String sql = "SELECT * FROM transactionbtwuser WHERE to_account_id = ? OR from_account_id = ?";
+
+        return jdbcTemplate.query(sql, (resultSet, i) -> {
+            return new TransactionBtwUser(
+                    resultSet.getLong(1),
+                    resultSet.getDouble(2),
+                    resultSet.getTimestamp(3),
+                    resultSet.getString(4),
+                    resultSet.getString(5),
+                    resultSet.getLong(6),
+                    resultSet.getLong(7)
+            );
+        }, accountNo, accountNo);
+
+    }
 }

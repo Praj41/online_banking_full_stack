@@ -24,7 +24,15 @@ public class accountService {
         this.userService = userService;
     }
 
+    public boolean empty(User user) {
+        return user.getEmail().isEmpty() ||
+                user.getUsername().isEmpty() ||
+                user.getPassword().isEmpty();
+    }
+
     public int createAccount(User user) {
+        if (empty(user))
+            return 0;
         user.setEnabled(true);
         primaryAccountDao.createAcc(default_balance);
         userService.addUser(user);
@@ -33,7 +41,7 @@ public class accountService {
 
     public String authLogin(User user) {
         Long uid = userService.getUserByUsernamePass(user.getUsername(), user.getPassword());
-        if (uid == 0){
+        if (uid == 0) {
             return "0";
         } else {
             return uid.toString();

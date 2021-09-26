@@ -1,0 +1,75 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+<style>
+    th {
+        color: black;
+    }
+
+    td {
+        background-color: white;
+    }
+
+    body {
+
+        background-color: #283149;
+    }
+
+    .button {
+        top: 10%;
+        right: 0;
+        background-color: silver;
+        transition-duration: 0.4s;
+        border-radius: 12px;
+        width: 75px;
+        height: 50px;
+        margin: 25px 100px 25px 0px;
+    }
+
+    .button:hover {
+        background-color: black; /* Green */
+        color: white;
+    }
+
+    .center {
+        margin-top: 3%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    h1 {
+        font-size: 5rem;
+        color: #DBEDF3;
+        font-family: "Arvo", cursive;
+        text-shadow: 3px 0 #DA0463;
+    }
+
+</style>
+<body>
+<button class="button" onclick="home()">Back</button>
+<h1>Intrabank Transactions</h1>
+<table class="center">
+    <table class="table-responsive">
+        <table class="table table-striped table-sm">
+
+            <tr class="bg-info">
+                <th>ID</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Description</th>
+                <th>Status</th>
+                <th>to_account_id</th>
+                <th>from_account_id</th>
+            </tr>
+
+            <tbody id="myTable">
+
+            </tbody>
+        </table>
+    </table>
+</table>
+</body>
+
+<script src="../static/JS/UTransaction.js"></script>

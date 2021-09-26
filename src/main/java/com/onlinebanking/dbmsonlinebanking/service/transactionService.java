@@ -34,4 +34,8 @@ public class transactionService {
     public TransactionBtwUser btwUser(TransactionBtwUser trans) {
         return transactionDao.btwUser(trans);
     }
+
+    public List<TransactionBtwUser> selectTransactionsBtwUsrByAccno(Long accountNo) {
+        return transactionDao.selectTransactionsBtwUsr(accountNo);
+    }
 }

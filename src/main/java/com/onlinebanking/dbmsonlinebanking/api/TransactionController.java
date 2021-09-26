@@ -39,4 +39,9 @@ public class TransactionController {
         return transactionService.btwUser(trans);
     }
 
+    @GetMapping(path = "utu/{id}")
+    public List<TransactionBtwUser> getTransactionsBtwUsr(@PathVariable("id") Long accountNo) {
+        return transactionService.selectTransactionsBtwUsrByAccno(accountNo);
+    }
+
 }
