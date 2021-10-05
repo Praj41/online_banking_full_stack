@@ -123,8 +123,9 @@ BEGIN
     WHERE loan_account.account_number = accno
       AND primary_account.account_number = customer.primary_account_id
       AND loan_account.account_number = customer.loan_account_id;
-
-    IF NOT (SELECT loan_balance FROM loan_account WHERE account_number = accno) > 0.0 THEN
+    IF amount = 0.0 THEN
+        SET bal = bal;
+    ELSEIF NOT (SELECT loan_balance FROM loan_account WHERE account_number = accno) > 0.0 THEN
         UPDATE loan_account
         SET loan_balance = amount,
             loan_total   = amount,
@@ -193,9 +194,9 @@ BEGIN
     SET now = sysdate();
     SELECT loan_total, years, rate INTO pay, yrs, rt FROM loan_account WHERE account_number = laccno;
 
-    SET rt = rt / 12;
+    SET rt = rt / 1200;
     SET yrs = yrs * 12;
-    SET pay = pay / yrs;
+    SET pay = (pay * rt * POW((1 + rt), yrs) ) / (POW((1 + rt), yrs) - 1);
 
     SELECT account_balance INTO amt FROM primary_account WHERE account_number = paccno;
     SELECT loan_balance INTO bal FROM loan_account WHERE account_number = laccno;
@@ -207,7 +208,7 @@ BEGIN
     ELSEIF bal <= pay THEN
         INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
                                  loan_account_id)
-        VALUES (bal, amt - bal, now, 'EMI Amount Has Been Deducted From Primary', 'Success', 'EMI', paccno, laccno);
+        VALUES (bal, amt - bal, now, 'EMI Amount Has Been Deducted From Primary, Full Loan Paid', 'Success', 'EMI', paccno, laccno);
         UPDATE loan_account
         SET loan_balance = 0.0,
             loan_total   = 0.0,
@@ -217,7 +218,7 @@ BEGIN
     ELSE
 
         UPDATE loan_account
-        SET loan_balance = loan_balance + (loan_balance * rt / 100) - pay
+        SET loan_balance = loan_balance + (loan_balance * rt) - pay
         WHERE account_number = laccno;
         INSERT INTO transaction (amount, available_balance, date, description, status, type, primary_account_id,
                                  loan_account_id)

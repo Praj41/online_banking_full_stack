@@ -89,6 +89,10 @@ function payloan() {
 
     loginRequest2.onload = function () {
         var tmp = JSON.parse(loginRequest2.responseText);
+        if (tmp.status === 500) {
+            alert("Get a Loan First");
+            return;
+        }
         alert(tmp.status + "!!\nFor More details check History");
         data1.account_balance = tmp.available_balance;
         filldata();

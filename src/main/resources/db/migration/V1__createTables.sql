@@ -18,15 +18,15 @@ CREATE TABLE loan_account
 CREATE TABLE customer
 (
     user_id            BIGINT PRIMARY KEY NOT NULL AUTO_INCREMENT,
-    email              varchar(255)       NOT NULL,
+    email              varchar(255)       NOT NULL UNIQUE,
     enabled            bit(1)             NOT NULL,
     first_name         varchar(255) DEFAULT NULL,
     last_name          varchar(255) DEFAULT NULL,
     password           varchar(255) DEFAULT NULL,
     phone              varchar(255) DEFAULT NULL,
     username           varchar(255) DEFAULT NULL,
-    primary_account_id BIGINT       DEFAULT NULL,
-    loan_account_id    BIGINT       DEFAULT NULL,
+    primary_account_id BIGINT       DEFAULT NULL UNIQUE,
+    loan_account_id    BIGINT       DEFAULT NULL UNIQUE,
     UNIQUE KEY `UK_user_email` (`email`),
     CONSTRAINT FK_usrpriacc FOREIGN KEY (primary_account_id) REFERENCES primary_account (account_number),
     CONSTRAINT FK_usrloanacc FOREIGN KEY (loan_account_id) REFERENCES loan_account (account_number)
