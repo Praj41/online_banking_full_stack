@@ -53,6 +53,7 @@ public class UserDao {
     public Optional<User> selectUserById(Long user_id) {
         String sql = "SELECT * FROM customer WHERE user_id = ?";
         User user;
+
         try {
             user = jdbcTemplate.queryForObject(sql,
                     (resultSet, i) -> {
